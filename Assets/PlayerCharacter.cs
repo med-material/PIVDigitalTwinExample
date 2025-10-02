@@ -12,6 +12,9 @@ public class PlayerCharacter : MonoBehaviour
 
     private float gravityValue = -9.81f;
     
+    [SerializeField]
+    float timeChange = 10f;
+
 
   private void Awake()
     {
@@ -27,11 +30,15 @@ public class PlayerCharacter : MonoBehaviour
             playerVelocity.y = 0f;
         }
 
+        float mouseX = Input.GetAxis("Mouse X") * timeChange;
+        transform.Rotate(Vector3.up, mouseX);
+
         // Apply gravity
         playerVelocity.y += gravityValue * Time.deltaTime;
 
         // gather lateral input control
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 moveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 move = transform.TransformDirection(moveInput);
 
         // scale by speed
         move *= playerSpeed;
