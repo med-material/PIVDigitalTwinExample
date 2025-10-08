@@ -47,4 +47,10 @@ public class PlayerCharacter : MonoBehaviour
         controller.Move(move * Time.deltaTime);
 
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collision started.");
+    }
+
 }

@@ -32,7 +32,7 @@ public class ThirdPerson : MonoBehaviour
         Vector3 objRotation = mouseYRot.eulerAngles;
         //objRotation.y = Mathf.Clamp(objRotation.y, -70f, 70f);
         //mouseYRot = Quaternion.Euler(objRotation);
-        Debug.Log(objRotation);
+        //Debug.Log(objRotation);
         
 
 
