@@ -14,42 +14,46 @@ public class ThirdPerson : MonoBehaviour
     [SerializeField]
     Vector3 offset;
 
+    Quaternion currentRotation;
+
     // Start is called before the first frame update
     void Start()
     {
+        currentRotation = this.transform.rotation;
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
 
-        Quaternion mouseXRot = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * timeChange, transform.up);
+        float mouseY = Input.GetAxis("Mouse Y") * timeChange;
+        float mouseX = Input.GetAxis("Mouse X") * timeChange;
+        //transform.Rotate(Vector3.right, mouseY);
 
-
-        Quaternion mouseYRot = Quaternion.AngleAxis(-Input.GetAxis("Mouse Y") * timeChange, transform.right);
-
-
-        Vector3 objRotation = mouseYRot.eulerAngles;
-        //objRotation.y = Mathf.Clamp(objRotation.y, -70f, 70f);
-        //mouseYRot = Quaternion.Euler(objRotation);
-        //Debug.Log(objRotation);
+        // Create quaternion for the yaw (horizontal rotation)
+        Quaternion yawRotation = Quaternion.AngleAxis(mouseX, Vector3.up);
         
+        // Create quaternion for the pitch (vertical rotation)
+        Quaternion pitchRotation = Quaternion.AngleAxis(-mouseY, Vector3.right);
+        
+        // Combine rotations
+        currentRotation = yawRotation * currentRotation; // Apply yaw first
+        currentRotation *= pitchRotation; // Then apply pitch
+
+        // Update the camera's position based on the target and offset
+        transform.position = target.transform.position + currentRotation * offset;
+        
+        // Have the camera look at the target
+        transform.LookAt(target.transform.position);
 
 
-        offset = mouseYRot * mouseXRot * offset;
-
-        //offset = mouseYRot * offset;
-
-
-
-
-
-        Vector3 desiredPosition = target.position + offset;
-        Vector3 smoothedPosition = Vector3.Slerp(transform.position, desiredPosition, timeChange * Time.deltaTime);
-        transform.position = smoothedPosition;
+        //Vector3 desiredPosition = target.position + offset;
+        //Vector3 smoothedPosition = Vector3.Slerp(transform.position, desiredPosition, timeChange * Time.deltaTime);
+        //transform.position = mouseYRot * transform.position;
+        //transform.Rotate(Vector3.right, mouseYRot);
         //transform.position = target.position + offset;
 
-        transform.LookAt(target);
+        //transform.LookAt(target);
 
 
         //float x = Input.GetAxis("Mouse X");

@@ -24,11 +24,20 @@ public class Seagull : MonoBehaviour
 
     float y;
 
+    GameObject goldenEgg;
+    bool moveEgg = false;
+
     // Update is called once per frame
     void Update()
     {
         WingsMove();
         FlyAround();
+
+        if (moveEgg) {
+            EggMovement();
+        } else {
+            DropGoldenEgg();
+        }
     }
 
     void FlyAround() {
@@ -51,6 +60,27 @@ public class Seagull : MonoBehaviour
         //apply the change to the gameObject
         wingL.transform.localEulerAngles = wingLcurrentEulerAngles;
         wingR.transform.localEulerAngles = wingRcurrentEulerAngles;
+    }
+
+    void DropGoldenEgg() {
+        Vector3 down = transform.TransformDirection(Vector3.up * -10);
+        Debug.DrawRay(transform.position, down, Color.red);
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, down, out hit, 10f, Physics.DefaultRaycastLayers)) {
+            if (hit.collider) {
+                if (hit.collider.gameObject.name == "Player") {
+                    goldenEgg = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    goldenEgg.transform.position = this.transform.position;
+                    goldenEgg.transform.localScale = new Vector3(0.05f,0.05f,0.05f);
+                    moveEgg = true;              
+                }
+            }
+        }
+    }
+
+    void EggMovement() {
+        goldenEgg.transform.position = new Vector3(goldenEgg.transform.position.x, goldenEgg.transform.position.y - 0.01f, goldenEgg.transform.position.z);
     }
 
 }

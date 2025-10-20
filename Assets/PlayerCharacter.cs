@@ -31,13 +31,13 @@ public class PlayerCharacter : MonoBehaviour
         }
 
         float mouseX = Input.GetAxis("Mouse X") * timeChange;
-        transform.Rotate(Vector3.up, mouseX);
+        transform.Rotate(Vector3.up * mouseX);
 
         // Apply gravity
         playerVelocity.y += gravityValue * Time.deltaTime;
 
         // gather lateral input control
-        Vector3 moveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 moveInput = new Vector3(Input.GetAxis("Horizontal"), playerVelocity.y, Input.GetAxis("Vertical"));
         Vector3 move = transform.TransformDirection(moveInput);
 
         // scale by speed
@@ -46,11 +46,22 @@ public class PlayerCharacter : MonoBehaviour
         // call .Move() once only
         controller.Move(move * Time.deltaTime);
 
+        Vector3 forward = transform.TransformDirection(Vector3.forward * 10);
+        Debug.DrawRay(transform.position, forward, Color.green);
+
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Collision started.");
+        // Get the name of the collided GameObject
+        string collidedObjectName = other.gameObject.name;
+        
+        // Output the name to the console
+        Debug.Log("Collided with: " + collidedObjectName);
+
+        if (collidedObjectName == "HolyText") {
+         Destroy(other.gameObject);
+        }
     }
 
 }
