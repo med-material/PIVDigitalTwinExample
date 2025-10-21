@@ -4,6 +4,7 @@ public class PlayerCharacter : MonoBehaviour
 {
 
     private CharacterController controller;
+    private Rigidbody rigidbody;
     private bool groundedPlayer;
     private Vector3 playerVelocity;
 
@@ -20,6 +21,7 @@ public class PlayerCharacter : MonoBehaviour
     {
         // always add a controller
         controller = GetComponent<CharacterController>();
+        rigidbody = GetComponent<Rigidbody>();
     }
     // Update is called once per frame
     void Update()
@@ -51,6 +53,11 @@ public class PlayerCharacter : MonoBehaviour
 
     }
 
+    void FixedUpdate()
+    {
+
+    }
+
     void OnTriggerEnter(Collider other)
     {
         // Get the name of the collided GameObject
@@ -61,6 +68,10 @@ public class PlayerCharacter : MonoBehaviour
 
         if (collidedObjectName == "HolyText") {
          Destroy(other.gameObject);
+        }
+        if (collidedObjectName == "Wasp") {
+        Debug.Log("Add force " + collidedObjectName);
+         other.transform.GetComponent<Rigidbody>().AddForce(transform.forward * 2f);
         }
     }
 
