@@ -12,6 +12,9 @@ public class ThirdPerson : MonoBehaviour
     float timeChange = 10f;
 
     [SerializeField]
+    float verMovement = 1f;
+
+    [SerializeField]
     Vector3 offset;
 
     Quaternion currentRotation;
@@ -42,10 +45,10 @@ public class ThirdPerson : MonoBehaviour
 
         // Update the camera's position based on the target and offset
         transform.position = target.transform.position + currentRotation * offset;
-        
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, target.transform.position.y + verMovement * 0.1f,target.transform.position.y +verMovement), transform.position.z);
+
         // Have the camera look at the target
         transform.LookAt(target.transform.position);
-
 
         //Vector3 desiredPosition = target.position + offset;
         //Vector3 smoothedPosition = Vector3.Slerp(transform.position, desiredPosition, timeChange * Time.deltaTime);
@@ -69,8 +72,6 @@ public class ThirdPerson : MonoBehaviour
         //transform.LookAt(target);
 
         //Vector3 cameraRotation = transform.eulerAngles;
-
-
         //cameraRotation.y = Mathf.Clamp(cameraRotation.y, -90, 90);
         //cameraRotation.z = 0;
 
