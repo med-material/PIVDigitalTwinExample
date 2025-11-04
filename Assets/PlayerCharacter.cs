@@ -21,6 +21,15 @@ public class PlayerCharacter : MonoBehaviour
     private Button myButton;
 
     [SerializeField]
+    private Material fountainConfirmMaterial;
+
+    [SerializeField]
+    private FountainLife fountainLife;
+
+    [SerializeField]
+    private GenerateHolyText generator;
+
+    [SerializeField]
     private float playerSpeed = 2.0f;
 
     private float gravityValue = -9.81f;
@@ -103,6 +112,37 @@ public class PlayerCharacter : MonoBehaviour
             StartCoroutine(coroutine);
             //other.transform.GetComponent<Rigidbody>().AddForce(transform.forward * 2f);
         }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        // Get the name of the collided GameObject
+        string collidedObjectName = collision.gameObject.name;
+
+        if (collidedObjectName == "Altar" && holyTextCount > 0) {
+            for (int i = 0; i < holyTextCount; i++) {
+                generator.NewHolyText();
+            }
+            fountainLife.NewLife(holyTextCount);
+            holyTextCount = 0;
+            holyTextCounter.text = holyTextCount.ToString();
+            StartCoroutine(FountainConfirm(1.2f));
+        }
+    }
+
+   // every 2 seconds perform the print()
+    private IEnumerator FountainConfirm(float waitTime)
+    {
+            float time = 0f;
+            float step = 0.01f;
+            float alpha = 0f;
+            while (time < waitTime) {
+                time += Time.deltaTime * 4;
+                alpha = Mathf.Lerp(1f,0f,(time/waitTime));
+                Debug.Log(alpha);
+                fountainConfirmMaterial.color = new Color(255f,255f,255f,alpha);
+                yield return null;
+            }
     }
 
    // every 2 seconds perform the print()
