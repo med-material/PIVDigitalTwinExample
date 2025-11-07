@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FountainLife : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class FountainLife : MonoBehaviour
     [SerializeField]
     private float[] burstThresholds;
     private int currentThreshold = 0;
+
+    [SerializeField]
+    private CountDownText countDown;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -34,6 +38,10 @@ public class FountainLife : MonoBehaviour
                 //Debug.Log(burstThresholds[currentThreshold]);
                 multiplier = 1f - ((currentThreshold/10f));
             }
+        }
+
+        if (lifetime < 6f) {
+            countDown.CountDown(lifetime);
         }
     }
 
